@@ -3,19 +3,28 @@ version: 2
 project_name: bluetooth-sniffer
 
 builds:
-  - goos:
+  - id: bluetooth-sniffer
+    binary: bluetooth-sniffer
+    env:
+      - CGO_ENABLED=0
+    goos:
       - linux
-      - windows
-      - darwin
     goarch:
       - amd64
       - arm64
+    ldflags:
+      - -s -w
 
 archives:
-  - format: tar.gz
-    name_template: >-
-      {{ .ProjectName }}_
-      {{- title .Os }}_
-      {{- if eq .Arch "amd64" }}x86_64
-      {{- else if eq .Arch "386" }}i386
-      {{- else }}{{ .Arch }}{{ end }}
+  - id: bluetooth-sniffer
+    builds:
+      - bluetooth-sniffer
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: 'checksums.txt'
+
+release:
+  github:
+    owner: nxm
+    name: bluetooth-sniffer

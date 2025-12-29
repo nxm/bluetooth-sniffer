@@ -2,7 +2,7 @@ module github.com/nxm/bluetooth-sniffer
 
 go 1.24.4
 
-require tinygo.org/x/bluetooth v0.13.0
+require tinygo.org/x/bluetooth v0.14.0
 
 require (
 	github.com/go-ole/go-ole v1.2.6 // indirect

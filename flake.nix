@@ -16,18 +16,18 @@
           version = "1.0.0";
 
           src = ./.;
-          vendorHash = "sha256-UB/V4CO1YxqjNvROhCJAyWa3q79YrvkWa1R2sdSf8Zo=";
+          vendorHash = "sha256-CjEFbHnf6x1ebrIuWiNelEWI7E2CC4vrQo86gJ1+wQU=";
 
           meta = with pkgs.lib; {
             description = "Bluetooth Low Energy advertisement data sniffer";
             homepage = "https://github.com/nxm/bluetooth-sniffer";
             license = licenses.mit;
-            platforms = platforms.linux;
+            platforms = platforms.linux ++ platforms.darwin;
           };
 
-          buildInputs = with pkgs; [
-            bluez
-          ];
+          # BlueZ is the Linux BLE stack; on Darwin the cbgo backend links
+          # against the system CoreBluetooth framework instead.
+          buildInputs = pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.bluez ];
         };
       in
       {
@@ -46,8 +46,7 @@
             gopls
             go-tools
             golangci-lint
-            bluez
-          ];
+          ] ++ lib.optionals stdenv.isLinux [ bluez ];
         };
       }
     );
